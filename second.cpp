@@ -19,8 +19,8 @@ void goAndUse(char *x, char *y, int t)
 	}
 }
 
- int r = 12  - 10;
- 
+int r = 12 - 1;
+
 void memoryLeak()
 {
 	// null pointer dereference - malloc may fail
@@ -31,5 +31,3 @@ void memoryLeak()
 	
 	goAndUse(ptr, ptr, 10);	
 }
-		
-
