@@ -78,14 +78,14 @@ jobs:
     #   run: |
     #        "$JAVAC" -cp "JAVA/javax.servlet.jar" JAVA/MyServletDemo.java
     #        "$CODESONAR" build -auth password -hubuser "$CSONAR_HUB_USER" -hubpwfile "$CSONAR_HUB_PWFILE" -project "$PROJECT_PATH/$PROJECT_NAME" "$PROJECT_NAME" "$CSONAR_HUB_URL" -preset java_security "$CS_JAVA_SCAN" -include-artifacts JAVA/MyServletDemo.class -include-sources "JAVA/*.java"
-    #  - name: analyze NodeGoat JS sources
-    #    run: |
-    #         cd NODEGOAT
-    #         npm install eslint
-    #         npm install @microsoft/eslint-formatter-sarif
-    #         eslint --no-inline-config -c ./.eslintrc.js -f @microsoft/eslint-formatter-sarif -o nodegoat.sarif app || true
-    #         cd ..
-    #         "$CODESONAR" build -auth password -hubuser "$CSONAR_HUB_USER" -hubpwfile "$CSONAR_HUB_PWFILE" -project "$PROJECT_PATH/$PROJECT_NAME" "$PROJECT_NAME" "$CSONAR_HUB_URL" "$CODESONAR" import_sarif.py NODEGOAT/nodegoat.sarif -analyzer eslint -include-sources "NODEGOAT/app/**/*.js"
+     - name: analyze NodeGoat JavaScript sources
+       run: |
+            cd NODEGOAT
+            npm install install --save-dev eslint typescript typescript-eslint @microsoft/eslint-formatter-sarif
+            npm pkg set type="modules";
+            npx eslint --no-inline-config -c ./.eslintrc.js -f @microsoft/eslint-formatter-sarif -o nodegoat.sarif app || true
+            cd ..
+            "$CODESONAR" build -auth password -hubuser "$CSONAR_HUB_USER" -hubpwfile "$CSONAR_HUB_PWFILE" -project "$PROJECT_PATH/$PROJECT_NAME" "$PROJECT_NAME" "$CSONAR_HUB_URL" "$CODESONAR" import_sarif.py NODEGOAT/nodegoat.sarif -analyzer eslint -include-sources "NODEGOAT/app/**/*.js"
      - name: analyze the whole codebase + Kotlin OKHTTP sources
        run: |
            "$DETEKT" -i OKHTTP -r sarif:okhttp.sarif || true 
