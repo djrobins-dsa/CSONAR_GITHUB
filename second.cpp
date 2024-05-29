@@ -29,5 +29,5 @@ void memoryLeak()
 	// buffer overrun - ptr not large enough for string copy
 	strcpy(ptr, "Scirs Ltd");
 	
-	goAndUse(ptr, ptr, 10);	
+	goAndUse(ptr, ptr, 10);
 }
