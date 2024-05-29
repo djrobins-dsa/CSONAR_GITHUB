@@ -1,4 +1,4 @@
-name: Codesonar GitHub Demo
+name: CodeSonar GitHub Demo
 on:
   pull_request:
 env:
@@ -8,10 +8,8 @@ jobs:
   # perm required to solve "Resource not accessible by integration" warning when trying to upload SARIF
     permissions: write-all
     runs-on:
-    # Debian 12 is my laptop
+    # csonar_github is the label given to the runner on loki
       - csonar_github
-    # MrHermeling is Marks basement machine
-    # - MrHermeling
     env:
       CODESONAR: /opt/codesonar/codesonar/bin/codesonar
       # JAVA_HOME needed to execute Kotlin Detekt tool
@@ -23,23 +21,24 @@ jobs:
       CSONAR_HUB_USER: "${{ secrets.CSONAR_HUB_USER }}"
       CSONAR_HUB_PASS: "${{ secrets.CSONAR_HUB_PASS }}"
       TRUSTED_CERT: "${{ secrets.TRUSTED_CERT }}"
-      HUB_CERT: "${{ secrets.ROB_HUB_CERT }}"
-      HUB_KEY: "${{ secrets.ROB_HUB_KEY }}"
+      HUB_CERT: "${{ secrets.HUB_CERT }}"
+      HUB_KEY: "${{ secrets.HUB_KEY }}"
       CSONAR_HUB_PWFILE: "codesonar.hub.pwfile"
       CSONAR_HUB_URL: "https://partnerdemo.codesonar.com"
-      #CSONAR_HUB_URL: "https://duck.dyndns.org:7340"
       CSPYTHON: /opt/codesonar/codesonar/bin/cspython
       CSO_GITHUB: /opt/codesonar-github
       GITHUB_CAFILE: ".github/github.cert.pem"
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
       PULL_REQUEST_ID: ${{ github.event.pull_request.number }}
-      
+      PROJECT_PATH: /dsa/github
+
     container:
     # this container includes analysis support for C/C++, Java, Python, JS family, Kotlin
-      image: ghcr.io/rdaultongt/csonar_github:toolchain-codesonar8.1p0
-      credentials:
-         username: ${{ secrets.DOCKER_USER }}
-         password: ${{ secrets.DOCKER_PASS }}
+      image: loki:5000/csonar_github:toolchain-cs8.1p0
+      #image: ghcr.io/rdaultongt/csonar_github:toolchain-codesonar8.1p0
+      #credentials:
+      #   username: ${{ secrets.DOCKER_USER }}
+      #   password: ${{ secrets.DOCKER_PASS }}
     timeout-minutes: 360
     steps:
      - uses: actions/checkout@v3
@@ -67,7 +66,7 @@ jobs:
           -auth password
           -hubuser "$CSONAR_HUB_USER"
           -hubpwfile "$CSONAR_HUB_PWFILE"
-          -project /ROB/"$PROJECT_NAME"
+          -project "$PROJECT_PATH/$PROJECT_NAME"
           "$PROJECT_NAME"
           "$CSONAR_HUB_URL"
           gcc -c -I. demo.cpp second.cpp
