@@ -24,10 +24,10 @@ int r = 12 - 1;
 void memoryLeak()
 {
 	// null pointer dereference - malloc may fail
-	char *ptr = (char*)malloc(24);
+	char *ptr = (char*)malloc(32);
 
 	// buffer overrun - ptr not large enough for string copy
-	sprintf(ptr, "Scir Ltd with Pi: %.10f", 3.14159265359);
+	sprintf(ptr, "Scir Ltd with Pi: %.3f", 3.14159265359);
 
 	goAndUse(ptr, ptr, 10);
 }
