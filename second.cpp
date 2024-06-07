@@ -1,6 +1,7 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+#include <cmath>
 
 void goAndUse(char *x, char *y, int t)
 {
@@ -24,10 +25,10 @@ int r = 12 - 1;
 void memoryLeak()
 {
 	// null pointer dereference - malloc may fail
-	char *ptr = (char*)malloc(32);
+	char *ptr = (char*)malloc(42);
 
 	if (NULL != ptr) {
-		sprintf(ptr, "Scir Ltd with Pi: %1.3f", 3.14159265359);
+		sprintf(ptr, "Scir Ltd with int Pi: %i", (int)M_PI);
 	}
 
 	goAndUse(ptr, ptr, 10);
